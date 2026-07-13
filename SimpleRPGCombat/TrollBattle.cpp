@@ -7,7 +7,7 @@
 TrollStats::TrollStats()
 	:TrollHP(15)
 {
-	// Nothing but the wild growl of the troll!
+	// Nothing here but the wild growl of the troll!
 }
 
 // Is the NPC still conscious?
@@ -35,18 +35,24 @@ bool TrollStats::BattleTroll() {
 		TrollHP -= RPGElements::PlayerAttack(GetTrollHP());
 		std::cout << std::endl;
 
-		// Check to make sure the troll hasn't fainted yet. If not, troll will attack!
+		// Check to make sure the troll hasn't fainted yet. If not, troll try to attack!
 		if (TrollStats::IsTrollFaint() == false) {
-			NPCAttackDamage = RPGElements::MeleeAttack();
-			if (NPCAttackDamage == 0) {
-				std::cout << "The troll swung their sword and missed!" << std::endl << std::endl;
+
+			if (RollDx(20) > 4) {
+				NPCAttackDamage = RPGElements::MeleeAttack();
+				if (NPCAttackDamage == 0) {
+					std::cout << "The troll swung their sword and missed!" << std::endl << std::endl;
+				}
+				else {
+					std::cout << "The troll swung their sword and hit you for " << NPCAttackDamage << " points of damage!" << std::endl << std::endl;;
+					RPGElements::PlayerLoseHP(NPCAttackDamage);
+				}
 			}
-			else {
-				std::cout << "The troll swung their sword and hit you for " << NPCAttackDamage << " points of damage!" << std::endl << std::endl;;
-				RPGElements::PlayerLoseHP(NPCAttackDamage);
-			}
+			else
+				std::cout << "The Troll got distracted by a butterfly!" << std::endl << std::endl;
 		}
 	}
+
 	if (IsTrollFaint())
 		return true;
 	else

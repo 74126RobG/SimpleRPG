@@ -6,7 +6,12 @@ Description : Using bject oriented programming, this program goes through
 		of the caves!
 By			: Robert Guziec
 Written		: Oct 13, 2025
-Last edited : Oct 14, 2025
+Last edited : July 07, 2026
+
+ToDo:
+	* Condensed the "roll" action for characters 07/07/26
+	* Create name field for the character 
+	* Try to clean up datatypes?
 */
 
 #include <iostream>
@@ -30,7 +35,7 @@ int main() {
 
 	// Defensive programming
 	while ((playerChoice != 'n') && (playerChoice != 'y')){
-		std::cout << std::endl << "Please enter a valid choice!" << std::endl;
+		std::cout << std::endl << "A wise guy eh? Please enter a valid choice!" << std::endl;
 		std::cout << "Do you engage? (y / n)" << std::endl << std::endl;
 		std::cout << "Choice: ";
 		std::cin >> playerChoice;

@@ -29,32 +29,20 @@ bool RPGElements::IsPlayerFaint() {
 	}
 }
 
-// Roll D20 for attack
-int RPGElements::RollD20() const {
+int RPGElements::RollDx(int sides) const{
+
 	int DValue = 0;
-	DValue = rand() % 21;
-
-	return DValue;
-}
-
-// Roll D4
-int RPGElements::RollD4() const {
-	int DValue = 0;
-	DValue = rand() % 5;
-
-	return DValue;
-}
-int RPGElements::RollD8() const {
-	int DValue = rand() % 9;
+	DValue = rand() % (sides +1);
 	return DValue;
 };
+
 
 // Determine if successful attack, and how much damage
 int RPGElements::MeleeAttack() const {
 
 	int doesAttack = 0;
 	int damage = 0;
-	int attack = RollD20();
+	int attack = RollDx(20);
 
 	// TODO: Setup for future critical hit modifications 
 	if ((attack >= 5) && (attack <= 18)) {
@@ -66,10 +54,10 @@ int RPGElements::MeleeAttack() const {
 	}
 
 	if (doesAttack == 1) {
-		damage += RollD4();
+		damage += RollDx(4);
 	}
 	else if (doesAttack == 2) {
-		damage += 2 * RollD4();
+		damage += 2 * RollDx(4);
 	}
 
 	return damage;
@@ -77,7 +65,7 @@ int RPGElements::MeleeAttack() const {
 int RPGElements::LongBowAttack() const {
 	int doesAttack = 0;
 	int damage = 0;
-	int attack = RollD20();
+	int attack = RollDx(20);
 
 	// TODO: Setup for future critical hit modifications 
 	if ((attack >= 5) && (attack <= 18)) {
@@ -89,10 +77,10 @@ int RPGElements::LongBowAttack() const {
 	}
 
 	if (doesAttack == 1) {
-		damage += RollD8();
+		damage += RollDx(8);
 	}
 	else if (doesAttack == 2) {
-		damage += 2 * RollD8();
+		damage += 2 * RollDx(8);
 	}
 
 	return damage;
@@ -110,6 +98,7 @@ int RPGElements::PlayerAttack(const int NPCHP) const {
 	std::cin >> playerChoice;
 	std::cout << std::endl;
 
+	// Melee attack
 	if (playerChoice == 'a') {
 		playerAttackDamage = MeleeAttack();
 
@@ -122,6 +111,7 @@ int RPGElements::PlayerAttack(const int NPCHP) const {
 			return 0;
 		}
 	}
+	// Bow attack
 	else if (playerChoice == 'b') {
 		playerAttackDamage = LongBowAttack();
 
@@ -134,16 +124,34 @@ int RPGElements::PlayerAttack(const int NPCHP) const {
 			return 0;
 		}
 	}
-
+	// Psychich ability choice
 	else if (playerChoice == 'c') {
-		std::cout << "You used your psychic ability against your foe!" << std::endl;
-		if (RollD4() > 1) {
-			std::cout << "The foe has " << NPCHP << std::endl;;
+		std::cout << "You muster all your might for a psychic ability against your foe!" << std::endl << std::endl;
+		int psyAbility = RollDx(4);
+
+		if (psyAbility == (1 || 3)) {
+			std::cout << "You were able to read your enemy's mind!" << std::endl;
+			std::cout << "The foe has " << NPCHP << std::endl;
+			return 0;
+		}
+		else if (psyAbility == 2) {
+			std::cout << "You feel a tingling sensation within your finger tips. Could this be?" << std::endl;
+			std::cout << "Is this really??" << std::endl << std::endl;
+
+			std::cout << "F I R E B A L L !!!!!!!!" << std::endl;
+
+			//Roll for damage
+			int playerAttackDamage = 0;
+			for (int i = 0; i < 8; i++)
+				playerAttackDamage += RollDx(6);
+
+			std::cout << "Wowee! You hit your foe for " << playerAttackDamage << " worth of damage!" << std::endl;
+			return playerAttackDamage;
 		}
 		else {
-			std::cout << "The ability failed!" << std::endl;
+			std::cout << "The ability failed! Does that ever really work in real life?" << std::endl;
+			return 0;
 		}
-		return 0;
 	}
 	else {
 		std::cout << "You tripped over a rock and lost your turn! Enter a valid selection next time!" << std::endl;
